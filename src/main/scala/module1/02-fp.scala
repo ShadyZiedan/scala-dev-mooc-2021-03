@@ -179,7 +179,7 @@ object hof{
 
     def printIfAny(): Unit = this match {
       case Option.Some(v) => println(v)
-      case Option.None => ()
+      case Option.None =>
     }
 
     def orElse[B >: A](b: Option[B]): Option[B] = this match {
@@ -187,12 +187,9 @@ object hof{
       case Option.None => b
     }
 
-    def zip[B](b: Option[B]): Option[(A, B)] = this match {
-      case Option.Some(v1) => b match {
-        case Option.Some(v2) => Option.Some((v1, v2))
-        case Option.None => Option.None
-      }
-      case Option.None => Option.None
+    def zip[B](b: Option[B]): Option[(A, B)] = (this, b) match {
+      case (Option.Some(v1), Option.Some(v2)) => Option.Some((v1, v2))
+      case _ => Option.None
     }
 
     def filter(f: A => Boolean): Option[A] = this match {
