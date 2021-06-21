@@ -165,7 +165,10 @@ object hof{
       case Option.None => Option.None
     }
 
-    def flatMap[B](f: A => Option[B]): Option[B] = ???
+    def flatMap[B](f: A => Option[B]): Option[B] = this match {
+      case Option.Some(v) => f(v)
+      case Option.None => Option.None
+    }
 
     // val i : Option[Int]  i.map(v => v + 1)
 
@@ -174,7 +177,25 @@ object hof{
       if(y == 0) Option.None
       else Option.Some(x / y)
 
+    def printIfAny(): Unit = this match {
+      case Option.Some(v) => println(v)
+      case Option.None =>
+    }
 
+    def orElse[B >: A](b: Option[B]): Option[B] = this match {
+      case Option.Some(_) => this
+      case Option.None => b
+    }
+
+    def zip[B](b: Option[B]): Option[(A, B)] = (this, b) match {
+      case (Option.Some(v1), Option.Some(v2)) => Option.Some((v1, v2))
+      case _ => Option.None
+    }
+
+    def filter(f: A => Boolean): Option[A] = this match {
+      case Option.Some(v) if f(v) => this
+      case _ => Option.None
+    }
   }
 
    object Option{
